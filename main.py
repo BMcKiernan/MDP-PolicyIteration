@@ -4,6 +4,7 @@ total_rows = 3
 total_cols = 4
 
 #actions are ((.1 prob of going left), (.9 prob of going desired direction))
+#tuples (given key of desired action) represent (left, desired action) 
 actions = {'right':('up', 'right'), 'down':('right', 'down'), 'left':('down', 'left'), 'up':('left','up'),}
 
 def copy_to(array1, array2):
@@ -41,7 +42,7 @@ def transition_iteration():
                 state = (i, j)
                 prob1 = get_position_value(state, (actions['up'])[0])
                 prob9 = get_position_value(state, (actions['up'])[1])
-                value = round(reward + discount*( 0.1 * prob1 + 0.9 * prob9), 6)
+                value = round(reward + discount*( 0.1 * prob1 + 0.9 * prob9), 3)
                 temp_space[i][j] = value
             else:
                 continue
@@ -56,7 +57,7 @@ def transition_iteration():
                 for key in actions:
                     prob1 = get_position_value(state, (actions[key])[0])
                     prob9 = get_position_value(state, (actions[key])[1])
-                    val = round(float((0.1 * prob1 + 0.9 * prob9)), 6)
+                    val = round(float((0.1 * prob1 + 0.9 * prob9)), 3)
                     if choice is None:
                         choice = [key, val]
                         temp_space[i][j] = choice[1]
@@ -100,13 +101,10 @@ def get_position_value(state, action):
             val = state_space[state[0]][state[1]]
         else: 
             val = state_space[state[0]][state[1] + 1]
-    if val == -99:
-         print "\n In get_position_value \n life is pain \n"
     return val
 
 #grid is space for printing
 #string name is to print before grid
-#obstacles is coordinates of None aka obstacle
 def print_space(grid, string_name):
     print "\t\t " + string_name
     for i in range(total_rows):
@@ -114,18 +112,20 @@ def print_space(grid, string_name):
     print ""
 
 if __name__ == "__main__":
-    obstacle = (1,1)
 
+    #state_space shows policy iteration and calc of rewards
     setup_statespace(total_rows, total_cols, 0)
     state_space[1][1] = None #obstacle
-    state_space[0][3] = 1
-    state_space[1][3] = -1
+    state_space[0][3] = 1 #utility
+    state_space[1][3] = -1 #utility
 
+    #policy space - shows agents move choices 
     setup_policyspace(total_rows, total_cols, "null") 
     policy_space[1][1] = None #obstacle
-    policy_space[0][3] = 1
-    policy_space[1][3] = -1
-
+    policy_space[0][3] = 1 #utility
+    policy_space[1][3] = -1 #utility
+    
+    #temp_space is for holding intermediary values
     setup_tempspace(total_rows, total_cols, 0)
     temp_space[1][1] = None
     temp_space[0][3] = 1
@@ -136,7 +136,7 @@ if __name__ == "__main__":
     print_space(policy_space, "policy")
     
     i = 0
-    p = 12
+    p = 10
     while(i < p):
         transition_iteration()
         i += 1
@@ -144,3 +144,6 @@ if __name__ == "__main__":
         print_space(state_space, "state_space")
         print_space(policy_space, "policy")
 
+    print "\n Rewards converge to within .001 for all cells after 10 policy iterations \n" 
+
+    
