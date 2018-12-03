@@ -44,6 +44,9 @@ def transition_iteration():
                 value = round(reward + discount*( 0.1 * prob1 + 0.9 * prob9), 6)
                 state_space[i][j] = value
         print state_space[i]
+    for j, row in enumerate(state_space):
+		for k, e in enumerate(row):
+			old_state_space[j][k] = e
     #Update Policy 
     for i in range(row_max):
         for j in range(col_max):
@@ -70,8 +73,8 @@ def transition_iteration():
 #action is any of the actions dictionary  
 def get_position_value(state, action):
     val = -99
-    row_max = len(old_state_space) -1 
-    col_max = len(old_state_space[0]) -1 
+    row_max = len(old_state_space) -1
+    col_max = len(old_state_space[0]) -1
     if action == 'up':
         # in first row can't go up || there is obstacle
         if state[0] == 0 or old_state_space[state[0] - 1][state[1]] is None:
@@ -139,7 +142,7 @@ if __name__ == "__main__":
         	for k, e in enumerate(row):
         		old_state_space[j][k] = e
         i += 1
-        print "After " + str(i) +  " iterations" 
+        print "After " + str(i) +  " iterations"
         print_space(state_space, "state_space", obstacle)
         print_space(policy_space, "policy", obstacle)
 
