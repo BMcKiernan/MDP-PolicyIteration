@@ -3,8 +3,7 @@ reward = -0.05
 discount = 0.9
 total_rows = 3
 total_cols = 4
-state_space = []
-policy_space = []
+
 
 
 #actions are ((.1 prob of going left), (.9 prob of going desired direction))
@@ -105,8 +104,6 @@ def get_position_value(state, action):
 #string name is to print before grid
 #obstacles is coordinates of None aka obstacle
 def print_space(grid, string_name, obstacle):
-    state_space[obstacle[1]][obstacle[1]] = "OBS"
-    policy_space[obstacle[1]][obstacle[1]] = "OBS"
     print "\t\t " + string_name
     for i in range(total_rows):
         print "\t\t " + str(grid[i])
