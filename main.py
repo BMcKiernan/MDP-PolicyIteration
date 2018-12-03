@@ -1,4 +1,4 @@
-
+import pdb
 reward = -0.05
 discount = 0.9
 total_rows = 3
@@ -28,33 +28,41 @@ def transition_iteration():
     prob9 = 0
     row_max = len(state_space) 
     col_max = len(state_space[0])
+    print "\n\n Random policy step \n"
     #Random Policy Step 1 - Up for all
     for i in range(row_max):
         for j in range(col_max):
-            if state_space[i][j] is not None and state_space[i][j] != -1 and state_space[i][j] != 1:
+            if state_space[i][j] == None:
+                continue
+            elif state_space[i][j] == -1:
+                continue 
+            elif state_space[i][j] == 1:
+                continue
+            else:
                 state = (i, j)
                 prob1 = get_position_value(state, (actions['up'])[0])
                 prob9 = get_position_value(state, (actions['up'])[1])
-                value = round(reward + discount*( 0.1 * prob1 + 0.9 * prob9), 4)
+                value = round(reward + discount*( 0.1 * prob1 + 0.9 * prob9), 6)
                 state_space[i][j] = value
-            else:
-                continue
+        print state_space[i]
     #Update Policy 
     for i in range(row_max):
         for j in range(col_max):
             if state_space[i][j] is not None and state_space[i][j] != -1 and state_space[i][j] != 1:
                 choice = None
                 state = (i, j)
-                for key, value in actions.iteritems():
-                    prob1 = get_position_value(state, value[0])
-                    prob9 = get_position_value(state, value[1])
-                    value = round((0.1 * prob1 + 0.9 * prob9), 4)
+                for key in actions:
+                    prob1 = get_position_value(state, (actions[key])[0])
+                    prob9 = get_position_value(state, (actions[key])[1])
+                    val = round(float((0.1 * prob1 + 0.9 * prob9)), 6)
                     if choice is None:
-                        choice = [key, value]
-                    elif choice[1] < value:
-                        choice = [key, value]
-                state_space[i][j] = choice[1]
-                policy_space[i][j] = choice[0]
+                        choice = [key, val]
+                        state_space[i][j] = choice[1]
+                        policy_space[i][j] = choice[0]
+                    elif choice[1] < val:
+                        choice = [key, val]
+                        state_space[i][j] = choice[1]
+                        policy_space[i][j] = choice[0]
             else:
                 continue
 
@@ -93,15 +101,20 @@ def get_position_value(state, action):
          print "\n In get_position_value \n life is pain \n"
     return val
 
-
-def print_space(grid, string_name):
+#grid is space for printing
+#string name is to print before grid
+#obstacles is coordinates of None aka obstacle
+def print_space(grid, string_name, obstacle):
+    state_space[obstacle[1]][obstacle[1]] = "OBS"
+    policy_space[obstacle[1]][obstacle[1]] = "OBS"
     print "\t\t " + string_name
     for i in range(total_rows):
         print "\t\t " + str(grid[i])
     print ""
 
 if __name__ == "__main__":
-    
+    obstacle = (1,1)
+
     setup_statespace(total_rows, total_cols, 0)
     state_space[1][1] = None #obstacle
     state_space[0][3] = 1
@@ -113,18 +126,15 @@ if __name__ == "__main__":
     policy_space[1][3] = -1
 
     print "Printing setup" 
-    print_space(state_space, "state_space")
-    print_space(policy_space, "policy")
+    print_space(state_space, "state_space", obstacle)
+    print_space(policy_space, "policy", obstacle)
+    
+    i = 0
+    p = 12
+    while(i < p):
+        transition_iteration()
+        i += 1
+        print "After " + str(i) +  " iterations" 
+        print_space(state_space, "state_space", obstacle)
+        print_space(policy_space, "policy", obstacle)
 
-    transition_iteration()
-
-    print "After 1 iterations" 
-    print_space(state_space, "state_space")
-    print_space(policy_space, "policy")
-
-
-    transition_iteration()
-
-    print "After 2 iterations" 
-    print_space(state_space, "state_space")
-    print_space(policy_space, "policy")
