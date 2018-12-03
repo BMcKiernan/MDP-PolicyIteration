@@ -35,7 +35,7 @@ def transition_iteration():
                 state = (i, j)
                 prob1 = get_position_value(state, (actions['up'])[0])
                 prob9 = get_position_value(state, (actions['up'])[1])
-                value = reward + discount*( 0.1 * prob1 + 0.9 * prob9)
+                value = round(reward + discount*( 0.1 * prob1 + 0.9 * prob9), 4)
                 state_space[i][j] = value
             else:
                 continue
@@ -48,7 +48,7 @@ def transition_iteration():
                 for key, value in actions.iteritems():
                     prob1 = get_position_value(state, value[0])
                     prob9 = get_position_value(state, value[1])
-                    value = 0.1 * prob1 + 0.9 * prob9
+                    value = round((0.1 * prob1 + 0.9 * prob9), 4)
                     if choice is None:
                         choice = [key, value]
                     elif choice[1] < value:
