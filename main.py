@@ -106,10 +106,10 @@ def get_position_value(space, state, action):
 #grid is space for printing
 #string name is to print before grid
 def print_space(grid, string_name):
-    print "\t\t " + string_name
+    print("\t\t " + string_name)
     for i in range(total_rows):
-        print "\t\t " + str(grid[i])
-    print ""
+        print("\t\t " + str(grid[i]))
+    print ("")
 
 if __name__ == "__main__":
 
@@ -132,7 +132,7 @@ if __name__ == "__main__":
     temp_space[0][3] = 1 #utility
     temp_space[1][3] = -1 #utility
 
-    print "Printing setup" 
+    print("Printing setup") 
     print_space(state_space, "state_space")
     print_space(policy_space, "policy")
     
@@ -141,9 +141,9 @@ if __name__ == "__main__":
     while(i < p):
         policy_iteration()
         i += 1
-        print "After " + str(i) +  " iterations"
+        print( "After " + str(i) +  " iterations")
         print_space(state_space, "state_space")
         print_space(policy_space, "policy")
 
-    print "\n Rewards converge to within .001 for all cells after 10 policy iterations \n" 
+    print ("\n Rewards converge to within .001 for all cells after 10 policy iterations \n" )
 
